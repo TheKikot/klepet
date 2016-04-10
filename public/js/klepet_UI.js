@@ -1,9 +1,17 @@
 function divElementEnostavniTekst(sporocilo) {
+  var jeVideo = sporocilo.indexOf('<iframe id=\'video\'') > -1;
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />')
+    .replace('&lt;iframe', '<iframe').replace('&gt;&lt;/iframe&gt;', '></iframe>');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  } 
+  
+  else if (jeVideo){
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+  }
+  
+  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
@@ -13,10 +21,12 @@ function divElementHtmlTekst(sporocilo) {
 }
 
 function procesirajVnosUporabnika(klepetApp, socket) {
+  console.log("a pu?");
   var sporocilo = $('#poslji-sporocilo').val();
+  sporocilo = dodajVideo(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
-
+  console.log("a pide do sem?");
   if (sporocilo.charAt(0) == '/') {
     sistemskoSporocilo = klepetApp.procesirajUkaz(sporocilo);
     if (sistemskoSporocilo) {
@@ -123,7 +133,7 @@ function dodajSmeske(vhodnoBesedilo) {
     "(y)": "like.png",
     ":*": "kiss.png",
     ":(": "sad.png"
-  }
+  };
   for (var smesko in preslikovalnaTabela) {
     vhodnoBesedilo = vhodnoBesedilo.replace(smesko,
       "<img src='http://sandbox.lavbic.net/teaching/OIS/gradivo/" +
@@ -131,3 +141,19 @@ function dodajSmeske(vhodnoBesedilo) {
   }
   return vhodnoBesedilo;
 }
+
+function dodajVideo(bes) {
+  console.log("klice se metoda");
+  var regIzraz = /(https:\/\/www\.youtube\.com\/watch\?v=\S+)/;
+  if(bes.test(regIzraz)) {
+    var stVideov = bes.match(regIzraz);
+    console.log("tabela je napisana");
+    for(var i = 0; i < stVideov.length; i++){
+      bes = bes.replace(stVideov[i], '<iframe id=\'video\' src=\"' + stVideov[i] + '\" allowfullscreen></iframe>').replace('watch?v=', 'embed/');
+    }
+    console.log("zdej vrne bes");
+    return bes;
+  } else return bes;
+}
+
+/*global $*/
