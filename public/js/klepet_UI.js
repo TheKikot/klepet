@@ -2,7 +2,8 @@ function divElementEnostavniTekst(sporocilo) {
   var jeSlika = sporocilo.indexOf('http') > -1 && (sporocilo.indexOf(".gif") > -1 || sporocilo.indexOf('.jpg') > -1 || sporocilo.indexOf('.png') > -1);
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko || jeSlika) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img')
+    .replace('png\' /&gt;', 'png\' />').replace('jpg\' /&gt;', 'jpg\' />').replace('gif\' /&gt;', 'gif\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
@@ -136,6 +137,7 @@ function dodajSmeske(vhodnoBesedilo) {
 }
 
 function dodajSlike(bes) {
+  
   var povezava = "";
   var slika = "";
   
@@ -146,21 +148,21 @@ function dodajSlike(bes) {
         if (bes.indexOf('.jpg') > -1) {
           povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.jpg') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
         if (bes.indexOf('.png') > -1) {
           povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.png') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
         if (bes.indexOf('.gif') > -1) {
           povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.gif') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
@@ -171,21 +173,21 @@ function dodajSlike(bes) {
         if (bes.indexOf('.jpg') > -1) {
           povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.jpg') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
         if (bes.indexOf('.png') > -1) {
           povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.png') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
         if (bes.indexOf('.gif') > -1) {
           povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.gif') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes.replace(povezava, slika);
+          bes = bes.replace(povezava, slika);
           return bes;
         }
         
