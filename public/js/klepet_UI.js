@@ -1,11 +1,13 @@
 function divElementEnostavniTekst(sporocilo) {
+  var jeSlika = sporocilo.indexOf('http') > -1 && (sporocilo.indexOf(".gif") > -1 || sporocilo.indexOf('.jpg') > -1 || sporocilo.indexOf('.png') > -1);
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko) {
+  if (jeSmesko || jeSlika) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
   } else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
+  
 }
 
 function divElementHtmlTekst(sporocilo) {
@@ -14,6 +16,7 @@ function divElementHtmlTekst(sporocilo) {
 
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
+  sporocilo = dodajSlike(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
 
@@ -123,7 +126,7 @@ function dodajSmeske(vhodnoBesedilo) {
     "(y)": "like.png",
     ":*": "kiss.png",
     ":(": "sad.png"
-  }
+  };
   for (var smesko in preslikovalnaTabela) {
     vhodnoBesedilo = vhodnoBesedilo.replace(smesko,
       "<img src='http://sandbox.lavbic.net/teaching/OIS/gradivo/" +
@@ -131,3 +134,65 @@ function dodajSmeske(vhodnoBesedilo) {
   }
   return vhodnoBesedilo;
 }
+
+function dodajSlike(bes) {
+  var povezava = "";
+  var slika = "";
+  
+  if (bes.indexOf('http') > -1 && (bes.indexOf(".gif") > -1 || bes.indexOf('.jpg') > -1 || bes.indexOf('.png') > -1)) {
+    console.log("prikazujem sliko...");
+      if(bes.indexOf('http://') > -1 ) {
+        
+        if (bes.indexOf('.jpg') > -1) {
+          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.jpg') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+        if (bes.indexOf('.png') > -1) {
+          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.png') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+        if (bes.indexOf('.gif') > -1) {
+          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.gif') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+      }
+      
+      if(bes.indexOf('https://') > -1) {
+        
+        if (bes.indexOf('.jpg') > -1) {
+          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.jpg') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+        if (bes.indexOf('.png') > -1) {
+          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.png') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+        if (bes.indexOf('.gif') > -1) {
+          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.gif') + 4);
+          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
+          bes.replace(povezava, slika);
+          return bes;
+        }
+        
+      }
+    
+  }
+  else return bes;
+}
+
+/*global $*/
