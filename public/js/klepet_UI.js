@@ -1,8 +1,13 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
+<<<<<<< HEAD
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img')
       return $('<div style="font-weight: bold"></div>').html(sporocilo);
+=======
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+>>>>>>> youtube
   }  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
@@ -17,7 +22,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
-
+  console.log("a pide do sem?");
   if (sporocilo.charAt(0) == '/') {
     sistemskoSporocilo = klepetApp.procesirajUkaz(sporocilo);
     if (sistemskoSporocilo) {
@@ -29,7 +34,11 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
+<<<<<<< HEAD
   dodajSlike($('#poslji-sporocilo').val());
+=======
+  dodajVideo($('#poslji-sporocilo').val());
+>>>>>>> youtube
   $('#poslji-sporocilo').val('');
 }
 
@@ -77,8 +86,13 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+<<<<<<< HEAD
     var slika = dodajSlike(sporocilo.besedilo);
     $('#sporocila').append(slika);
+=======
+    var video = dodajVideo(sporocilo.besedilo);
+    $('#sporocila').append(video);
+>>>>>>> youtube
   });
   
   socket.on('kanali', function(kanali) {
@@ -140,6 +154,7 @@ function dodajSmeske(vhodnoBesedilo) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* global $ */
 =======
 function dodajSlike(bes) {
@@ -153,3 +168,17 @@ function dodajSlike(bes) {
 
 /*global $*/
 >>>>>>> slike
+=======
+function dodajVideo(bes) {
+  console.log("klice se metoda");
+
+  var reg = /(https|http):..www.youtube.com.watch.v\S{12}/g;
+  var videi= bes.match(reg);
+  for(var vid in videi){
+    var n = videi[vid].split(/=/);
+    $("#sporocila").append('<iframe src="https://www.youtube.com/embed/'+n[1]+'" allowfullscreen class="youtube" ></iframe>');
+  }
+}
+
+/*global $*/
+>>>>>>> youtube
