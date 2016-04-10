@@ -100,7 +100,17 @@ $(document).ready(function() {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
   });
-
+  
+  socket.on('dregljaj', function(dregljaj){
+    
+      $('#vsebina').trigger('startRumble');
+      var zvok = new Audio('sounds-957-flutter.mp3');
+      zvok.play();
+      setTimeout(function(){$('#vsebina').trigger('stopRumble');}
+        ,1500);
+  });        
+  
+  
   setInterval(function() {
     socket.emit('kanali');
     socket.emit('uporabniki', {kanal: trenutniKanal});
