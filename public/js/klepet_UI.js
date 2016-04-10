@@ -1,11 +1,15 @@
 function divElementEnostavniTekst(sporocilo) {
   var jeSlika = sporocilo.indexOf('http') > -1 && (sporocilo.indexOf(".gif") > -1 || sporocilo.indexOf('.jpg') > -1 || sporocilo.indexOf('.png') > -1);
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
-  if (jeSmesko || jeSlika) {
+  if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img')
     .replace('png\' /&gt;', 'png\' />').replace('jpg\' /&gt;', 'jpg\' />').replace('gif\' /&gt;', 'gif\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } else {
+  } 
+  else if (jeSlika) {
+    return $('<div style="font-weight: bold"></div>').html(sporocilo);
+  }
+  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
   
@@ -143,6 +147,7 @@ function dodajSlike(bes) {
   
   if (bes.indexOf('http') > -1 && (bes.indexOf(".gif") > -1 || bes.indexOf('.jpg') > -1 || bes.indexOf('.png') > -1)) {
     console.log("prikazujem sliko...");
+    
       if(bes.indexOf('http://') > -1 ) {
         
         if (bes.indexOf('.jpg') > -1) {
@@ -151,7 +156,7 @@ function dodajSlike(bes) {
           bes = bes.replace(povezava, slika);
           return bes;
         }
-        
+        console.log("mu");
         if (bes.indexOf('.png') > -1) {
           povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.png') + 4);
           slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
