@@ -1,15 +1,9 @@
 function divElementEnostavniTekst(sporocilo) {
-  var jeSlika = sporocilo.indexOf('http') > -1 && (sporocilo.indexOf(".gif") > -1 || sporocilo.indexOf('.jpg') > -1 || sporocilo.indexOf('.png') > -1);
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
     sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img')
-    .replace('png\' /&gt;', 'png\' />').replace('jpg\' /&gt;', 'jpg\' />').replace('gif\' /&gt;', 'gif\' />');
-    return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } 
-  else if (jeSlika) {
-    return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  }
-  else {
+      return $('<div style="font-weight: bold"></div>').html(sporocilo);
+  }  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
   
@@ -21,7 +15,6 @@ function divElementHtmlTekst(sporocilo) {
 
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
-  sporocilo = dodajSlike(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
 
@@ -36,7 +29,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
-
+  dodajSlike($('#poslji-sporocilo').val());
   $('#poslji-sporocilo').val('');
 }
 
@@ -84,6 +77,8 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    var slika = dodajSlike(sporocilo.besedilo);
+    $('#sporocila').append(slika);
   });
   
   socket.on('kanali', function(kanali) {
@@ -142,64 +137,11 @@ function dodajSmeske(vhodnoBesedilo) {
 
 function dodajSlike(bes) {
   
-  var povezava = "";
-  var slika = "";
-  
-  if (bes.indexOf('http') > -1 && (bes.indexOf(".gif") > -1 || bes.indexOf('.jpg') > -1 || bes.indexOf('.png') > -1)) {
-    console.log("prikazujem sliko...");
-    
-      if(bes.indexOf('http://') > -1 ) {
-        
-        if (bes.indexOf('.jpg') > -1) {
-          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.jpg') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        console.log("mu");
-        if (bes.indexOf('.png') > -1) {
-          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.png') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        
-        if (bes.indexOf('.gif') > -1) {
-          povezava = bes.substring(bes.indexOf('http://'),bes.indexOf('.gif') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        
-      }
-      
-      if(bes.indexOf('https://') > -1) {
-        
-        if (bes.indexOf('.jpg') > -1) {
-          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.jpg') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        
-        if (bes.indexOf('.png') > -1) {
-          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.png') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        
-        if (bes.indexOf('.gif') > -1) {
-          povezava = bes.substring(bes.indexOf('https://'),bes.indexOf('.gif') + 4);
-          slika = '<img source="'+ povezava + '" width=200 hspace=20 >';
-          bes = bes.replace(povezava, slika);
-          return bes;
-        }
-        
-      }
-    
-  }
-  else return bes;
+  var reg = /(https|http):..[^ ]*\.(jpg|png|gif)/g;
+    var match = bes.match(reg);
+    for (var img in match) { 
+      $("#sporocila").append('<img src="' + match[img] + '" width=200px hspace=20px />');
+    }
 }
 
 /*global $*/
