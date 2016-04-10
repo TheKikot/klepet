@@ -1,17 +1,9 @@
 function divElementEnostavniTekst(sporocilo) {
-  var jeVideo = sporocilo.indexOf('<iframe id=\'video\'') > -1;
   var jeSmesko = sporocilo.indexOf('http://sandbox.lavbic.net/teaching/OIS/gradivo/') > -1;
   if (jeSmesko) {
-    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />')
-    .replace('&lt;iframe', '<iframe').replace('&gt;&lt;/iframe&gt;', '></iframe>');
+    sporocilo = sporocilo.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace('&lt;img', '<img').replace('png\' /&gt;', 'png\' />');
     return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  } 
-  
-  else if (jeVideo){
-    return $('<div style="font-weight: bold"></div>').html(sporocilo);
-  }
-  
-  else {
+  }  else {
     return $('<div style="font-weight: bold;"></div>').text(sporocilo);
   }
 }
@@ -22,7 +14,6 @@ function divElementHtmlTekst(sporocilo) {
 
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
-  sporocilo = dodajVideo(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
   console.log("a pide do sem?");
@@ -37,7 +28,7 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
-
+  dodajVideo($('#poslji-sporocilo').val());
   $('#poslji-sporocilo').val('');
 }
 
@@ -85,6 +76,8 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    var video = dodajVideo(sporocilo.besedilo);
+    $('#sporocila').append(video);
   });
   
   socket.on('kanali', function(kanali) {
@@ -144,16 +137,12 @@ function dodajSmeske(vhodnoBesedilo) {
 function dodajVideo(bes) {
   console.log("klice se metoda");
 
-  var regIzraz = new RegExp('https://www.youtube.com/watch?v=','g');
-  if(regIzraz.test(bes)) {
-    var stVideov = bes.match(regIzraz);
-    console.log("tabela je napisana");
-    for(var i = 0; i < stVideov.length; i++){
-      bes = bes.replace(stVideov[i], '<iframe id=\'video\' src=\"' + stVideov[i] + '\" allowfullscreen></iframe>').replace('watch?v=', 'embed/');
-    }
-    console.log("zdej vrne bes");
-    return bes;
-  } else return bes;
+  var reg = /(https|http):..www.youtube.com.watch.v\S{12}/g;
+  var videi= bes.match(reg);
+  for(var vid in videi){
+    var n = videi[vid].split(/=/);
+    $("#sporocila").append('<iframe src="https://www.youtube.com/embed/'+n[1]+'" allowfullscreen class="youtube" ></iframe>');
+  }
 }
 
 /*global $*/
