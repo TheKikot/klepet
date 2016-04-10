@@ -21,7 +21,6 @@ function divElementHtmlTekst(sporocilo) {
 }
 
 function procesirajVnosUporabnika(klepetApp, socket) {
-  console.log("a pu?");
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajVideo(sporocilo);
   sporocilo = dodajSmeske(sporocilo);
@@ -144,8 +143,9 @@ function dodajSmeske(vhodnoBesedilo) {
 
 function dodajVideo(bes) {
   console.log("klice se metoda");
-  var regIzraz = /(https:\/\/www\.youtube\.com\/watch\?v=\S+)/;
-  if(bes.test(regIzraz)) {
+
+  var regIzraz = new RegExp('https://www.youtube.com/watch?v=','g');
+  if(regIzraz.test(bes)) {
     var stVideov = bes.match(regIzraz);
     console.log("tabela je napisana");
     for(var i = 0; i < stVideov.length; i++){
