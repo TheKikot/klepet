@@ -99,6 +99,11 @@ $(document).ready(function() {
     for (var i=0; i < uporabniki.length; i++) {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
+    
+    $('#seznam-uporabnikov div').click(function() {
+      $('#poslji-sporocilo').val = ('/zasebno '+ $(this).text());
+      $('#poslji-sporocilo').focus();
+    });
   });
 
   setInterval(function() {
@@ -123,7 +128,7 @@ function dodajSmeske(vhodnoBesedilo) {
     "(y)": "like.png",
     ":*": "kiss.png",
     ":(": "sad.png"
-  }
+  };
   for (var smesko in preslikovalnaTabela) {
     vhodnoBesedilo = vhodnoBesedilo.replace(smesko,
       "<img src='http://sandbox.lavbic.net/teaching/OIS/gradivo/" +
@@ -131,3 +136,5 @@ function dodajSmeske(vhodnoBesedilo) {
   }
   return vhodnoBesedilo;
 }
+
+/* global $ */
